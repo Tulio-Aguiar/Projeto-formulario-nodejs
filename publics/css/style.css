@@ -1,0 +1,12 @@
+
+/* 
+    //Nova forma de inserir include partial
+<%- include ('/partials/header.ejs')%> 
+
+*/
+
+body{
+    background-color:#eceff1;
+}
+
+

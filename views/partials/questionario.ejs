@@ -1,0 +1,23 @@
+<div class="container">
+
+    <div class="card" id="formulario-pergunta">
+        <div class="card-header">
+            <h3>Realizar Pergunta</h3>
+        </div>
+
+        <div class="card-body">
+            <form action="/respostasalva" method="POST">
+                <label for="titulo">Título:</label>
+                <input type="text" name="titulo" id="" placeholder="Título" class="form-control">
+                <br>
+                <label for="email">E-mail:</label>
+                <input type="email" name="email" id="" class="form-control">
+                <br>
+                <label for="textarea">Descrição:</label>
+                <textarea placeholder="Descreva sua pergunta aqui" class="form-control" name="textarea"></textarea>
+                <br>
+                <button class="btn btn-primary">Perguntar</button>
+            </form>
+        </div>
+    </div>
+</div>
