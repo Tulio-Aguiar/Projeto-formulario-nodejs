@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const connection = require('./database/database');
 const Pergunta = require('./database/Pergunta');
+const Resposta = require('./database/Resposta');
 
 //Database: fazendo conexão
 
@@ -34,8 +35,9 @@ app.use(express.urlencoded({ extended: true}));
 // Rotas: comando para criá-las
 
 app.get('/', (req, res) => {
-    Pergunta.findAll({raw:true,order:[
-        ['id','DESC'] //ASC
+    Pergunta.findAll({raw:true, order:[
+        ['id','DESC'] //ASC , ({raw:true,order:[['id','DESC'], estabelece ordem crescente ou descrescente no DB
+            
     ]}).then(perguntas => { //pegar as informações do DB (tabelas) e imprimí-las nos terminal do Node ({raw:true}) = cru
         res.render('index.ejs',{
             perguntas:perguntas,
@@ -62,6 +64,42 @@ app.post('/respostasalva', (req, res)=> {
         textarea: textarea
     }).then(() => {
         res.redirect('/');
+    });
+});
+
+app.get("/pergunta/:id", (req, res) => {
+    var id= req.params.id; // criou rota e definniu como pegar a página
+    Pergunta.findOne({
+        where:{id: id}
+    }).then(pergunta => {
+        if(pergunta != undefined){ //Pergunta encontrada
+
+            Resposta.findAll({
+                where:{perguntaId: pergunta.id},
+                order:[['id','DESC']]
+            }).then(respostas => {
+                res.render("pergunta",{
+                    pergunta: pergunta,
+                    respostas: respostas
+                 });
+            })
+
+
+            
+        }else{ //Não encontrada
+            res.redirect("/");
+        }
+    }); //método do sequelize que busca um dado específico
+});
+
+app.post("/responder",(req, res) => {
+    var corpo = req.body.corpo;
+    var perguntaId = req.body.perguntaId;
+    Resposta.create({
+        corpo: corpo,
+        perguntaId: perguntaId,
+    }).then(() => {
+        res.redirect("/pergunta/"+perguntaId);
     });
 });
 
